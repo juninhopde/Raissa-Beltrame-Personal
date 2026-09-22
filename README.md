@@ -13,7 +13,7 @@ Bragança Paulista e região — SP
 |---|---|---|
 | `index.html` | O site inteiro: HTML, CSS, JavaScript, logo e foto embutidos | Não |
 | `logo.png` | Usado só no preview de link (WhatsApp, Facebook, Instagram) | Não |
-| `raissa.jpg` | Foto opcional de alta qualidade. Se existir, substitui a foto embutida | Sim |
+| `raissa.webp` / `raissa.jpg` | Cópia da foto tratada, para reedição. O site já tem a foto embutida | Sim |
 | `404.html` | Página de erro no mesmo visual do site | Sim |
 | `robots.txt` | Libera a indexação e aponta o sitemap | Sim |
 | `sitemap.xml` | Ajuda o Google a achar a página | Sim |
@@ -62,19 +62,21 @@ const CFG = {
 
 ### Trocar a foto
 
-Suba o arquivo com o nome exato **`raissa.jpg`** na raiz do repositório. Não precisa
-editar código: se existir, ele entra no lugar da foto embutida; se não existir, o site usa
-a que já está dentro do `index.html`.
+A foto do topo está **embutida no `index.html`** (base64), então o site nunca fica sem imagem.
+Para usar outra: suba o arquivo como `raissa.webp` na raiz e, no `index.html`, procure por
+`<figure class="hero-foto"` e troque todo o valor de `src="data:image/webp;base64,..."`
+por `src="raissa.webp"`.
 
 Requisitos da foto boa:
 
-- vertical (proporção entre 3:5 e 4:5), mínimo 800 px de largura
+- vertical, recorte da cintura para cima, mínimo 800 px de largura
 - **sem texto por cima** — arte de carrossel do Instagram não serve
 - de preferência sem logo de outra marca na roupa
-- JPG de até ~250 KB
+- fundo escuro ou fundo removido; as bordas devem ter transparência gradual (`.webp` com alpha),
+  senão aparece um retângulo recortado no meio do fundo preto
 
-Para ajustar o enquadramento, altere `object-position:50% 10%` na regra `.retrato .foto-base`
-(primeiro valor = horizontal, segundo = vertical).
+O `raissa.jpg` e o `raissa.webp` que acompanham o repositório são a foto atual já tratada,
+caso você queira reeditar a partir dela.
 
 ### Mudar as cores
 
