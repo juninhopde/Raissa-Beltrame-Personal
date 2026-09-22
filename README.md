@@ -52,6 +52,7 @@ const CFG = {
   whatsapp: "5511940424585",   // só números, com 55 na frente. Atualiza os 8 botões de uma vez.
   facebook: "",                 // cole a URL; vazio = o ícone do Facebook nem aparece
   faixaTopo: true,              // false = esconde a faixa "Últimas vagas" no topo
+  galeria: [],                  // nomes dos arquivos de foto: ["treino1.jpg","treino2.jpg",...]
   vagasLimitadas: true,         // false = esconde a fita "Mais procurado" no plano
   depoimentos: false,           // true + preencher listaDepoimentos = liga a seção
   listaDepoimentos: [
@@ -78,6 +79,35 @@ Requisitos da foto boa:
 
 Os arquivos `raissa.webp` (transparente) e `raissa.jpg` (com fundo) acompanham o repositório
 caso você queira reeditar a partir deles.
+
+### Colocar fotos de academia na galeria
+
+A seção "Treino na prática" só aparece quando existir foto. Enquanto a lista estiver vazia,
+a seção some inteira — não fica espaço em branco nem bloco escuro na página.
+
+Para ligar:
+
+1. Coloque as fotos na raiz do repositório, nomeadas `treino1.jpg`, `treino2.jpg`, e assim por diante.
+2. No `index.html`, no bloco `CFG`, escreva:
+
+```js
+galeria: ["treino1.jpg","treino2.jpg","treino3.jpg","treino4.jpg","treino5.jpg","treino6.jpg"],
+```
+
+Recomendação: **6 fotos**, verticais ou quadradas, de 800 a 1200 px, até 250 KB cada.
+Se um arquivo não existir, aquele quadro se remove sozinho — o resto continua funcionando.
+
+**De onde tirar as fotos, em ordem de eficácia:**
+
+1. **Fotos reais dela dando aula** (celular já resolve, com autorização do aluno por escrito).
+   Converte muito mais do que qualquer banco de imagem: a pessoa quer ver quem vai treinar ela.
+2. **Fotos do Instagram dela** — 130 posts publicados; várias devem servir.
+3. **Banco de imagens gratuito**, se for para preencher rápido: pexels.com/pt-br ou unsplash.com,
+   buscando "academia", "personal trainer", "gym training". Licença livre para uso comercial,
+   sem necessidade de crédito. Baixe, renomeie para `treino1.jpg` etc. e suba.
+
+Evite banco de imagens com gente musculosa de estúdio americano: quem mora em Bragança percebe
+que aquilo não é a academia dela, e o site perde a credibilidade que o resto da página constrói.
 
 ### Mudar as cores
 

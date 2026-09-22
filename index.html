@@ -30,6 +30,18 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@500;700;900&family=Manrope:wght@400;500;700&display=swap" rel="stylesheet">
 
+<script>
+/* marca que o JS está vivo. Sem isso, nenhum conteúdo é escondido:
+   se o JavaScript falhar ou for bloqueado, o site aparece inteiro. */
+document.documentElement.className+=" js";
+setTimeout(function(){
+  if(!document.body||!document.body.classList.contains("pronto")){
+    document.documentElement.classList.remove("js");
+    if(document.body){document.body.classList.add("pronto");}
+    document.querySelectorAll(".rev").forEach(function(e){e.classList.add("on");});
+  }
+},2500);
+</script>
 <style>
 /* ============================================================
    RAISSA BELTRAME — PERSONAL TRAINER
@@ -189,7 +201,8 @@ body.menu-aberto .abrir-menu i::after{transform:translateY(-6px) rotate(-45deg)}
 @keyframes pisca{0%{box-shadow:0 0 0 0 rgba(231,196,99,.55)}70%{box-shadow:0 0 0 9px rgba(231,196,99,0)}100%{box-shadow:0 0 0 0 rgba(231,196,99,0)}}
 .nome{margin:22px 0 0;font-size:clamp(3rem,8.6vw,7.4rem);letter-spacing:-.022em}
 .nome .lin{display:block;overflow:hidden}
-.nome .lin>span{display:block;transform:translateY(105%)}
+.nome .lin>span{display:block}
+.js .nome .lin>span{transform:translateY(105%)}
 body.pronto .nome .lin>span{animation:sobe 1.05s cubic-bezier(.16,1,.3,1) forwards}
 body.pronto .nome .lin:nth-child(2)>span{animation-delay:.11s}
 @keyframes sobe{to{transform:translateY(0)}}
@@ -200,15 +213,15 @@ body.pronto .nome .lin:nth-child(2)>span{animation-delay:.11s}
 }
 .sub b{color:var(--osso);font-weight:700}
 .acoes{display:flex;flex-wrap:wrap;gap:12px;margin-top:clamp(26px,4vw,40px)}
-.hero-fade{opacity:0}
+.js .hero-fade{opacity:0}
 body.pronto .hero-fade{animation:aparece .9s ease forwards;animation-delay:var(--d,.5s)}
 @keyframes aparece{to{opacity:1}}
 
 /* ---------- herói em duas colunas ---------- */
 .hero-grid{display:grid;grid-template-columns:1.05fr .95fr;gap:clamp(16px,3vw,50px);align-items:center;position:relative;z-index:3}
-.hero-foto::before{content:"";position:absolute;z-index:-1;left:-14%;right:-14%;top:6%;bottom:0;background:radial-gradient(58% 52% at 52% 42%,rgba(231,196,99,.19),rgba(61,21,36,.28) 55%,transparent 76%);filter:blur(6px)}
+.hero-foto::before{content:"";position:absolute;z-index:0;left:-14%;right:-14%;top:6%;bottom:0;background:radial-gradient(58% 52% at 52% 42%,rgba(231,196,99,.19),rgba(61,21,36,.28) 55%,transparent 76%);filter:blur(6px)}
 .hero-foto{margin:0;justify-self:end;width:min(100%,430px);align-self:end;position:relative}
-.hero-foto img{width:100%;height:auto;filter:drop-shadow(-28px 26px 46px rgba(0,0,0,.85))}
+.hero-foto img{position:relative;z-index:1;width:100%;height:auto;filter:drop-shadow(-28px 26px 46px rgba(0,0,0,.85))}
 @media (max-width:900px){
   .hero-grid{grid-template-columns:1fr;gap:0}
   .hero-foto{justify-self:center;width:min(74%,300px);margin:6px 0 0}
@@ -226,7 +239,8 @@ body.pronto .hero-fade{animation:aparece .9s ease forwards;animation-delay:var(-
 .fatos .r{display:block;margin-top:8px;font-size:.82rem;color:var(--osso-fraco);line-height:1.4}
 
 /* ---------- revelação de seção (um único device, 1x) ---------- */
-.rev{clip-path:inset(0 0 100% 0);opacity:.001;transition:clip-path 1s cubic-bezier(.16,1,.3,1),opacity .8s ease,transform 1s cubic-bezier(.16,1,.3,1);transform:translateY(14px)}
+.rev{transition:none}
+.js .rev{clip-path:inset(0 0 100% 0);opacity:.001;transition:clip-path 1s cubic-bezier(.16,1,.3,1),opacity .8s ease,transform 1s cubic-bezier(.16,1,.3,1);transform:translateY(14px)}
 .rev.on{clip-path:inset(0 0 0 0);opacity:1;transform:none}
 
 /* ---------- sobre ---------- */
@@ -239,10 +253,10 @@ body.pronto .hero-fade{animation:aparece .9s ease forwards;animation-delay:var(-
 .credenciais span{display:block;font-size:.86rem;color:var(--osso-fraco);margin-top:2px}
 
 /* ---------- marquee ---------- */
-.faixa{border-block:var(--borda);padding:0;overflow:hidden;background:var(--preto)}
-.faixa .pista{display:flex;gap:44px;padding:16px 0;width:max-content;animation:desliza 34s linear infinite}
-.faixa span{font-family:"Big Shoulders Display",sans-serif;font-weight:700;text-transform:uppercase;font-size:1.05rem;letter-spacing:.1em;color:#3a3431;white-space:nowrap;display:flex;align-items:center;gap:44px}
-.faixa span::after{content:"";width:5px;height:5px;background:var(--ouro-escuro);border-radius:50%}
+.faixa{border-block:var(--borda);padding:0;overflow:hidden;background:linear-gradient(180deg,#191615,#100e0d)}
+.faixa .pista{display:flex;gap:44px;padding:18px 0;width:max-content;animation:desliza 34s linear infinite}
+.faixa span{font-family:"Big Shoulders Display",sans-serif;font-weight:700;text-transform:uppercase;font-size:1.12rem;letter-spacing:.1em;color:#d8cfa8;white-space:nowrap;display:flex;align-items:center;gap:44px}
+.faixa span::after{content:"";width:5px;height:5px;background:var(--ouro);border-radius:50%}
 @keyframes desliza{to{transform:translateX(-50%)}}
 
 /* ---------- foco de treino ---------- */
@@ -275,6 +289,15 @@ body.pronto .hero-fade{animation:aparece .9s ease forwards;animation-delay:var(-
 .incluso-lista span{display:block;font-size:.85rem;color:var(--osso-fraco);line-height:1.5;margin-top:3px}
 @media (max-width:1000px){.incluso{grid-template-columns:1fr}}
 @media (max-width:620px){.incluso-lista{grid-template-columns:1fr}}
+
+/* ---------- galeria ---------- */
+.grade-galeria{display:grid;grid-template-columns:repeat(3,1fr);gap:clamp(8px,1vw,14px)}
+.grade-galeria figure{margin:0;position:relative;overflow:hidden;background:var(--grafite);border:var(--borda);aspect-ratio:4/5}
+.grade-galeria img{width:100%;height:100%;object-fit:cover;transition:transform .7s cubic-bezier(.16,1,.3,1),filter .5s;filter:saturate(.82) contrast(1.05)}
+.grade-galeria figure:hover img{transform:scale(1.05);filter:saturate(1) contrast(1.05)}
+.grade-galeria figure::after{content:"";position:absolute;inset:0;background:linear-gradient(to top,rgba(0,0,0,.55),transparent 55%);pointer-events:none}
+@media (max-width:900px){.grade-galeria{grid-template-columns:repeat(2,1fr)}}
+@media (max-width:480px){.grade-galeria{grid-template-columns:1fr 1fr;gap:8px}}
 
 /* ---------- planos ---------- */
 .planos{display:grid;grid-template-columns:1fr 1.14fr 1fr;gap:clamp(16px,2vw,26px);align-items:center}
@@ -399,8 +422,9 @@ footer{background:var(--preto);border-top:var(--borda);padding:34px 0;font-size:
 @media (prefers-reduced-motion:reduce){
   html{scroll-behavior:auto}
   *,*::before,*::after{animation-duration:.001ms !important;animation-iteration-count:1 !important;transition-duration:.001ms !important}
-  .rev{clip-path:none;opacity:1;transform:none}
-  .nome .lin>span{transform:none}
+  .rev,.js .rev{clip-path:none;opacity:1;transform:none}
+  .js .nome .lin>span{transform:none}
+  .js .hero-fade{opacity:1;animation:none}
   #poeira,#facho{display:none}
 }
 @media print{#carga,.flutua,#trilho,#facho,header{display:none}body{background:#fff;color:#000}}
@@ -577,6 +601,15 @@ footer{background:var(--preto);border-top:var(--borda);padding:34px 0;font-size:
   </div>
 </section>
 
+<!-- ====================== GALERIA (liga sozinha quando houver fotos em CFG.galeria) ====================== -->
+<section id="galeria" class="linha-topo oculto">
+  <div class="wrap">
+    <h2 class="display titulo rev" style="margin-bottom:14px">Treino na<br>prática</h2>
+    <p class="texto rev" style="margin-bottom:40px">Como é o acompanhamento no dia a dia, com aluno e professora lado a lado.</p>
+    <div class="grade-galeria rev" id="grade-galeria"></div>
+  </div>
+</section>
+
 <!-- ====================== PLANOS ====================== -->
 <section id="planos" class="linha-topo">
   <div class="wrap">
@@ -734,6 +767,9 @@ const CFG = {
   faixaTopo: true,                  // false = esconde a faixa "Últimas vagas" no topo
   vagasLimitadas: true,             // false = esconde a fita "Mais procurado" no plano
   depoimentos: false,               // true = liga a seção de depoimentos (preencha a lista abaixo)
+  // FOTOS DA GALERIA: coloque os arquivos na mesma pasta e liste os nomes aqui.
+  // Lista vazia = a seção some sozinha (nenhum espaço em branco na página).
+  galeria: [],                      // ex.: ["treino1.jpg","treino2.jpg","treino3.jpg"]
   listaDepoimentos: [
     // { texto: "Depoimento real da aluna.", autora: "Nome, 32 anos" },
   ],
@@ -782,6 +818,15 @@ const CFG = {
       '<blockquote class="depo"><p>“'+x.texto+'”</p><cite>'+(x.autora||"")+"</cite></blockquote>"
     ).join("");
     sec.classList.remove("oculto");
+  }
+
+  /* ---------- 4b. galeria de fotos ---------- */
+  if (Array.isArray(CFG.galeria) && CFG.galeria.length){
+    const g = d.getElementById("grade-galeria");
+    g.innerHTML = CFG.galeria.map((src,k) =>
+      '<figure><img src="'+src+'" alt="Treino com a personal trainer Raissa Beltrame — foto '+(k+1)+'" loading="lazy" onerror="this.closest(\'figure\').remove()"></figure>'
+    ).join("");
+    d.getElementById("galeria").classList.remove("oculto");
   }
 
   /* ---------- 5. ano do rodapé ---------- */
