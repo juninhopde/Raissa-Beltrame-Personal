@@ -149,10 +149,11 @@ header.fixa{background:rgba(6,5,5,.82);backdrop-filter:blur(14px);border-bottom-
 .menu{display:flex;align-items:center;gap:clamp(14px,2vw,30px)}
 .menu a{text-decoration:none;font-size:.92rem;font-weight:500;color:var(--osso-fraco);transition:color .25s}
 .menu a:hover{color:var(--ouro)}
-.abrir-menu{display:none;background:none;border:var(--borda);color:var(--osso);width:44px;height:44px;cursor:pointer;align-items:center;justify-content:center}
+.abrir-menu{display:none;position:relative;z-index:6;background:none;border:var(--borda);color:var(--osso);width:44px;height:44px;cursor:pointer;align-items:center;justify-content:center}
 .abrir-menu i{display:block;width:18px;height:1.5px;background:currentColor;position:relative}
 .abrir-menu i::before,.abrir-menu i::after{content:"";position:absolute;left:0;width:18px;height:1.5px;background:currentColor;transition:transform .3s}
 .abrir-menu i::before{top:-6px}.abrir-menu i::after{top:6px}
+body.menu-aberto .abrir-menu{border-color:var(--ouro);background:rgba(0,0,0,.6)}
 body.menu-aberto .abrir-menu i{background:transparent}
 body.menu-aberto .abrir-menu i::before{transform:translateY(6px) rotate(45deg)}
 body.menu-aberto .abrir-menu i::after{transform:translateY(-6px) rotate(-45deg)}
@@ -221,12 +222,15 @@ body.pronto .hero-fade{animation:aparece .9s ease forwards;animation-delay:var(-
 .hero-grid{display:grid;grid-template-columns:1.05fr .95fr;gap:clamp(16px,3vw,50px);align-items:center;position:relative;z-index:3}
 .hero-foto::before{content:"";position:absolute;z-index:0;left:-14%;right:-14%;top:6%;bottom:0;background:radial-gradient(58% 52% at 52% 42%,rgba(231,196,99,.19),rgba(61,21,36,.28) 55%,transparent 76%);filter:blur(6px)}
 .hero-foto{margin:0;justify-self:end;width:min(100%,430px);align-self:end;position:relative}
-.hero-foto img{position:relative;z-index:1;width:100%;height:auto;filter:drop-shadow(-28px 26px 46px rgba(0,0,0,.85))}
+.hero-foto img{position:relative;z-index:1;width:100%;height:auto;
+  -webkit-mask-image:linear-gradient(to bottom,#000 82%,rgba(0,0,0,.45) 94%,transparent 100%);
+  mask-image:linear-gradient(to bottom,#000 82%,rgba(0,0,0,.45) 94%,transparent 100%);filter:drop-shadow(-28px 26px 46px rgba(0,0,0,.85))}
 @media (max-width:900px){
   .hero-grid{grid-template-columns:1fr;gap:0}
   .hero-foto{justify-self:center;width:min(74%,300px);margin:6px 0 0}
   .hero-txt{text-align:center}
   .hero-txt .sub,.hero-txt .acoes{justify-content:center}
+  .selo{font-size:.68rem;letter-spacing:.08em;padding:7px 12px;gap:8px}
   .hero-txt .texto{margin-inline:auto}
 }
 
@@ -239,9 +243,11 @@ body.pronto .hero-fade{animation:aparece .9s ease forwards;animation-delay:var(-
 .fatos .r{display:block;margin-top:8px;font-size:.82rem;color:var(--osso-fraco);line-height:1.4}
 
 /* ---------- revelação de seção (um único device, 1x) ---------- */
+/* NUNCA usar clip-path para esconder: zera a área do elemento e o IntersectionObserver
+   deixa de disparar — o elemento fica preso invisível para sempre. Só opacity + transform. */
 .rev{transition:none}
-.js .rev{clip-path:inset(0 0 100% 0);opacity:.001;transition:clip-path 1s cubic-bezier(.16,1,.3,1),opacity .8s ease,transform 1s cubic-bezier(.16,1,.3,1);transform:translateY(14px)}
-.rev.on{clip-path:inset(0 0 0 0);opacity:1;transform:none}
+.js .rev{opacity:0;transform:translateY(20px);transition:opacity .85s ease,transform 1s cubic-bezier(.16,1,.3,1);will-change:opacity,transform}
+.rev.on{opacity:1;transform:none}
 
 /* ---------- sobre ---------- */
 .sobre-grid{display:grid;grid-template-columns:.95fr 1.05fr;gap:clamp(28px,5vw,72px);align-items:center}
@@ -300,10 +306,11 @@ body.pronto .hero-fade{animation:aparece .9s ease forwards;animation-delay:var(-
 @media (max-width:480px){.grade-galeria{grid-template-columns:1fr 1fr;gap:8px}}
 
 /* ---------- planos ---------- */
-.planos{display:grid;grid-template-columns:1fr 1.14fr 1fr;gap:clamp(16px,2vw,26px);align-items:center}
+.planos{display:grid;grid-template-columns:1fr 1.14fr 1fr;gap:clamp(16px,2vw,26px);align-items:stretch}
 .plano{border:var(--borda);background:var(--grafite);padding:clamp(26px,3vw,38px);display:flex;flex-direction:column;gap:20px;position:relative}
 .plano .nomep{font-family:"Big Shoulders Display",sans-serif;font-weight:700;text-transform:uppercase;font-size:1.3rem;letter-spacing:.04em}
 .plano .preco{font-family:"Big Shoulders Display",sans-serif;font-weight:900;font-size:clamp(2.6rem,5.2vw,3.8rem);line-height:.9;display:flex;align-items:baseline;gap:8px}
+.plano .preco.sem-numero{font-size:clamp(1.7rem,3vw,2.3rem);line-height:1}
 .plano .preco small{font-family:"Manrope",sans-serif;font-weight:500;font-size:.82rem;color:var(--osso-fraco);letter-spacing:0}
 .plano ul{list-style:none;margin:0;padding:0;display:grid;gap:11px;font-size:.93rem;color:var(--osso-fraco)}
 .plano ul li{display:flex;gap:10px;align-items:flex-start}
@@ -316,7 +323,7 @@ body.pronto .hero-fade{animation:aparece .9s ease forwards;animation-delay:var(-
 }
 .plano.destaque .preco{background:var(--metal);-webkit-background-clip:text;background-clip:text;color:transparent}
 .fita{
-  position:absolute;top:16px;right:-1px;background:var(--metal);color:#160f02;
+  position:absolute;top:0;right:0;background:var(--metal);color:#160f02;
   font-size:.7rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;padding:6px 14px;
 }
 .nota-planos{margin:26px auto 0;text-align:center;font-size:.86rem;color:#8a837c;max-width:60ch}
@@ -328,7 +335,9 @@ body.pronto .hero-fade{animation:aparece .9s ease forwards;animation-delay:var(-
 .depo cite{font-style:normal;font-size:.85rem;color:var(--osso-fraco)}
 
 /* ---------- FAQ ---------- */
-.faq{max-width:840px}
+.faq-grid{display:grid;grid-template-columns:.62fr 1fr;gap:clamp(24px,4vw,64px);align-items:start}
+.faq{max-width:none}
+@media (max-width:900px){.faq-grid{grid-template-columns:1fr;gap:26px}}
 .faq details{border-bottom:var(--borda)}
 .faq summary{
   list-style:none;cursor:pointer;padding:22px 44px 22px 0;position:relative;
@@ -422,7 +431,7 @@ footer{background:var(--preto);border-top:var(--borda);padding:34px 0;font-size:
 @media (prefers-reduced-motion:reduce){
   html{scroll-behavior:auto}
   *,*::before,*::after{animation-duration:.001ms !important;animation-iteration-count:1 !important;transition-duration:.001ms !important}
-  .rev,.js .rev{clip-path:none;opacity:1;transform:none}
+  .rev,.js .rev{opacity:1;transform:none}
   .js .nome .lin>span{transform:none}
   .js .hero-fade{opacity:1;animation:none}
   #poeira,#facho{display:none}
@@ -643,7 +652,7 @@ footer{background:var(--preto);border-top:var(--borda);padding:34px 0;font-size:
 
       <article class="plano">
         <div class="nomep">Sob medida</div>
-        <div class="preco">A combinar</div>
+        <div class="preco sem-numero">A combinar</div>
         <ul>
           <li>Mais de 6 aulas por mês</li>
           <li>Treino em dupla, dividindo o valor</li>
@@ -668,14 +677,16 @@ footer{background:var(--preto);border-top:var(--borda);padding:34px 0;font-size:
 <!-- ====================== DÚVIDAS ====================== -->
 <section id="duvidas" class="linha-topo alt">
   <div class="wrap">
-    <h2 class="display titulo rev" style="margin-bottom:40px">Dúvidas</h2>
-    <div class="faq rev">
+    <div class="faq-grid">
+      <h2 class="display titulo rev">Dúvidas</h2>
+      <div class="faq rev">
       <details><summary>Nunca treinei na vida. Serve para mim?</summary><div class="resp">Serve, e é justamente o melhor cenário para começar com acompanhamento. A primeira aula é mais leve: eu avalio como você se movimenta e ensino os padrões básicos antes de qualquer carga.</div></details>
       <details><summary>Onde acontecem as aulas?</summary><div class="resp">Atendo em Bragança Paulista e região. O local é combinado no WhatsApp conforme o seu plano e o seu horário — me chame que eu te passo as opções disponíveis.</div></details>
       <details><summary>O que acontece se eu faltar em uma aula do plano mensal?</summary><div class="resp">Me avise com antecedência e a gente tenta remarcar dentro do mês, conforme a agenda. Faltas sem aviso não são reposicionadas, porque o horário fica reservado só para você.</div></details>
       <details><summary>Você monta a dieta também?</summary><div class="resp">Plano alimentar é trabalho do nutricionista, e eu não invado essa área. O que eu faço é orientação básica de hábitos — hidratação, horários das refeições em volta do treino e escolhas do dia a dia. Quando o seu objetivo pede um plano alimentar de verdade, eu te indico nutricionista.</div></details>
       <details><summary>Preciso ter academia?</summary><div class="resp">Depende do objetivo e do que você tem disponível. Me conte no WhatsApp onde você pretende treinar que eu te digo o que é possível fazer ali.</div></details>
       <details><summary>Em quanto tempo eu vejo resultado?</summary><div class="resp">Disposição e sono normalmente mudam nas primeiras semanas. Mudança de composição corporal visível depende de constância, sono e alimentação — e leva meses, não dias. Quem te promete prazo fechado está vendendo, não treinando.</div></details>
+    </div>
     </div>
   </div>
 </section>
@@ -872,6 +883,17 @@ const CFG = {
       itens.forEach(i => { if (i.isIntersecting){ i.target.classList.add("on"); obs.unobserve(i.target); } });
     }, {threshold:.16, rootMargin:"0px 0px -8% 0px"});
     d.querySelectorAll(".rev").forEach(e => olho.observe(e));
+    // rede de segurança: se o observer falhar, a própria rolagem revela o que estiver na tela
+    const socorro = () => {
+      let faltam = 0;
+      d.querySelectorAll(".rev:not(.on)").forEach(e => {
+        const r = e.getBoundingClientRect();
+        if (r.top < window.innerHeight * .92 && r.bottom > 0) e.classList.add("on"); else faltam++;
+      });
+      if (!faltam) window.removeEventListener("scroll", socorro);
+    };
+    window.addEventListener("scroll", socorro, {passive:true});
+    setTimeout(socorro, 600);
 
     const passos = d.querySelectorAll(".etapa");
     const olho2 = new IntersectionObserver((itens, obs) => {
